@@ -1,0 +1,50 @@
+
+ Course: Introduction to Artificial Intelligence
+College : IT and Tech
+- Course code: AI-101
+- Course level: Undergraduate
+- Course duration: 14 weeks
+- Credits: 3 credit hours
+- Course description: Introduces artificial intelligence concepts, machine learning, natural language processing, and retrieval-augmented generation.
+- Prerequisites: Basic programming and introductory statistics
+- Learning outcomes:
+  - Explain fundamental artificial intelligence and machine learning concepts.
+  - Prepare, clean, and organize text data for analysis.
+  - Describe how embeddings and vector databases support semantic search.
+  - Build a simple retrieval-augmented generation application.
+  - Evaluate the quality, accuracy, and limitations of AI-generated answers.
+- Main topics:
+  - Introduction to artificial intelligence
+  - Supervised and unsupervised learning
+  - Text preprocessing and tokenization
+  - Embeddings and similarity search
+  - Document loading and text chunking
+  - Vector databases and indexing
+  - Retrieval-augmented generation
+  - Prompt design and response evaluation
+  - AI ethics, privacy, and bias
+- Weekly activities:
+  - Attend lectures and participate in discussions.
+  - Complete practical programming exercises.
+  - Read the assigned learning materials.
+  - Submit short quizzes and laboratory tasks.
+- Assessment:
+  - Assignments: 25%
+  - Laboratory exercises: 20%
+  - Midterm examination: 20%
+  - Final project: 25%
+  - Participation: 10%
+- Final project requirements:
+  - Use a collection of source documents.
+  - Create searchable document chunks.
+  - Store embeddings in a vector database.
+  - Provide a question-answering interface.
+  - Document limitations and test results.
+- Recommended tools:
+  - Python 3.11 or later
+  - Jupyter Notebook or a code editor
+  - Git for version control
+  - A vector database such as ChromaDB
+- Support:
+  - Students should contact the instructor during office hours for course questions.
+  - Technical issues should include the error message and steps used to reproduce the issue.

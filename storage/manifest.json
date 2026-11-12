@@ -1,0 +1,28 @@
+{
+  "config": {
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "chunk_size": 100,
+    "overlap": 20
+  },
+  "files": {
+    "course.txt": {
+      "hash": "a559f930c87053fd72e3b44ccd8a4a6f922141cf98e32e7453e36bf39bc3029a",
+      "ids": [
+        "7c8e0af8ac40f4f2f463a9ca6971013745188c55c5b3cf8bc9d1e8e4545c5f87",
+        "5835a17f4520ea71f306cf19f0600dc4213778b34d4dcb95f6ad2779cf081c17",
+        "cae084b470bca0a12328011adc04b877095d5aa78dca4d465958cbca659b17bf",
+        "a05d71c000b6e11843d22f884f31bcdcff71b17e901e2771cbbfadfe9fa9ce26"
+      ]
+    },
+    "university_policy.txt": {
+      "hash": "77d8ba90982d2ab2b1d9826f83f24ba9436c665c8113d44c16c1eb1d8d061424",
+      "ids": [
+        "0363dff7e4d7d57e16d39e3c01a0c24974b4d55847a9f4215c76d07c1d5b4e13",
+        "abc753877c345360d3f9e30a025844a35c89cdf46767a164d32865db15f64a6d",
+        "a58447394b4403cad391cbd601851e6cac01720aecc5827d630ab41ee56b3c17",
+        "f9f351aaf624da0aefa2e6b67b58a4852980853abc0a8ee079ed601f323df1af",
+        "4aec8b02eeed63c9af779fb70986032318406c54a05ab2ebd742ca0b3ed38ae3"
+      ]
+    }
+  }
+}

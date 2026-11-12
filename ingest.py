@@ -1,130 +1,132 @@
-"""Read PDFs and build the searchable Chroma index.
 
-Example:
-    python scripts/ingest.py --reset
-"""
-
-from __future__ import annotations
-
-import argparse
-import hashlib
-import sys
 from pathlib import Path
+from hashlib import sha256
+import json
 
 import chromadb
+from sentence_transformers import SentenceTransformer
+from chunker import chunk_text
 
-# Add the project folder to Python's import path when this file is run directly.
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+# 1. Configuration
+DOCS = Path("data/raw")
+STORAGE = Path("storage")
+STORAGE.mkdir(exist_ok=True)
 
-from src.rag.chunker import chunk_text
-from src.rag.embedder import embed_texts
-from src.rag.loader import load_documents
+MANIFEST_PATH = STORAGE / "manifest.json"
 
+MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+CHUNK_SIZE = 100
+OVERLAP = 20
 
-DEFAULT_DATA_DIR = PROJECT_ROOT / "data" / "raw"
-DEFAULT_DATABASE_DIR = PROJECT_ROOT / "chroma_db"
-DEFAULT_COLLECTION_NAME = "my_documents"
+CONFIG = {
+    "model": MODEL_NAME,
+    "chunk_size": CHUNK_SIZE,
+    "overlap": OVERLAP
+}
 
+# 2. Open the persistent database
+client = chromadb.PersistentClient(
+    path=str(STORAGE / "chroma")
+)
 
-def build_index(
-    data_dir: Path,
-    database_dir: Path,
-    collection_name: str,
-    reset: bool = False,
-) -> tuple[int, int]:
-    """Load PDFs, create embeddings, and save them in Chroma.
+collection = client.get_or_create_collection(
+    name="university_rag_v1"
+)
+if not DOCS.is_dir():
+    raise FileNotFoundError(f"Missing documents directory: {DOCS}")
 
-    Returns:
-        A tuple containing the number of documents and chunks indexed.
-    """
-    files = sorted(data_dir.rglob("*.pdf"))
-    if not files:
-        raise FileNotFoundError(f"No PDF files found under {data_dir}")
+# 3. Read the processing history
+if MANIFEST_PATH.exists():
+    manifest = json.loads(MANIFEST_PATH.read_text())
+else:
+    manifest = {"config": CONFIG, "files": {}}
 
-    documents = load_documents(files)
-    chunks: list[str] = []
-    metadatas: list[dict[str, str | int]] = []
-    chunk_ids: list[str] = []
-
-    for document in documents:
-        document_chunks = chunk_text(document.text, chunk_size=180, overlap=30)
-        for chunk_number, chunk in enumerate(document_chunks):
-            chunks.append(chunk)
-            metadatas.append(
-                {
-                    "source": document.source,
-                    "file_name": Path(document.source).name,
-                    "chunk": chunk_number,
-                }
-            )
-            # Stable IDs let us safely run ingestion more than once.
-            unique_id = f"{document.source}:{chunk_number}"
-            chunk_ids.append(hashlib.sha256(unique_id.encode()).hexdigest())
-
-    if not chunks:
-        raise ValueError("The PDFs contained no extractable text.")
-
-    print(f"Embedding {len(chunks)} chunks...")
-    embeddings = embed_texts(chunks)
-    client = chromadb.PersistentClient(path=str(database_dir))
-
-    if reset:
-        try:
-            client.delete_collection(collection_name)
-        except Exception:
-            # It is fine if the collection does not exist yet.
-            pass
-
-    collection = client.get_or_create_collection(name=collection_name)
-    collection.upsert(
-        ids=chunk_ids,
-        documents=chunks,
-        embeddings=embeddings.tolist(),
-        metadatas=metadatas,
-    )
-    return len(documents), len(chunks)
-
-
-def main() -> None:
-    """Read command-line arguments and build the index."""
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--data-dir",
-        type=Path,
-        default=DEFAULT_DATA_DIR,
-        help="Folder containing PDFs (default: data/raw).",
-    )
-    parser.add_argument(
-        "--db-dir",
-        type=Path,
-        default=DEFAULT_DATABASE_DIR,
-        help="Folder for the Chroma database (default: chroma_db).",
-    )
-    parser.add_argument(
-        "--collection",
-        default=DEFAULT_COLLECTION_NAME,
-        help="Chroma collection name.",
-    )
-    parser.add_argument(
-        "--reset",
-        action="store_true",
-        help="Delete the old collection before indexing.",
-    )
-    args = parser.parse_args()
-
-    document_count, chunk_count = build_index(
-        data_dir=args.data_dir,
-        database_dir=args.db_dir,
-        collection_name=args.collection,
-        reset=args.reset,
-    )
-    print(
-        f"Indexed {document_count} documents and {chunk_count} chunks "
-        f"in {args.db_dir}."
+if manifest["config"] != CONFIG:
+    raise RuntimeError(
+        "Model or chunk settings changed. "
+        "Rebuild the index with a new collection."
     )
 
+model = None
+current_files = set()
 
-if __name__ == "__main__":
-    main()
+# 4. Process documents
+for path in sorted(DOCS.rglob("*")):
+    if not path.is_file() or path.suffix not in {".txt", ".md", ".pdf"}:
+        continue
+
+    source = path.relative_to(DOCS).as_posix()
+    current_files.add(source)
+
+    file_hash = sha256(path.read_bytes()).hexdigest()
+    old = manifest["files"].get(source)
+
+    # Key optimization: skip unchanged documents!
+    if old and old["hash"] == file_hash:
+        print("SKIPPED:", source)
+        continue
+
+    # Replace this read with your existing loader as needed
+    if path.suffix == ".pdf":
+        # Use a PDF loader here
+        pass
+    else:
+        text = path.read_text(encoding="utf-8")
+
+    chunks = chunk_text(text, CHUNK_SIZE, OVERLAP)
+
+    ids = [
+        sha256(f"{source}:{i}".encode()).hexdigest()
+        for i in range(len(chunks))
+    ]
+
+    if chunks:
+        # Load the model only when embedding is needed
+        if model is None:
+            model = SentenceTransformer(MODEL_NAME)
+
+        vectors = model.encode(
+            chunks,
+            normalize_embeddings=True
+        ).tolist()
+
+        collection.upsert(
+            ids=ids,
+            documents=chunks,
+            embeddings=vectors,
+            metadatas=[
+                {"source": source, "chunk_index": i}
+                for i in range(len(chunks))
+            ]
+        )
+
+    # Delete obsolete chunks from the old version
+    old_ids = set(old["ids"]) if old else set()
+    stale_ids = list(old_ids - set(ids))
+
+    if stale_ids:
+        collection.delete(ids=stale_ids)
+
+    manifest["files"][source] = {
+        "hash": file_hash,
+        "ids": ids
+    }
+
+    print("INDEXED:", source, len(chunks), "chunks")
+
+# 5. Remove records for deleted documents
+for source in list(manifest["files"]):
+    if source not in current_files:
+        old_ids = manifest["files"][source]["ids"]
+        if old_ids:
+            collection.delete(ids=old_ids)
+
+        del manifest["files"][source]
+        print("REMOVED:", source)
+
+# 6. Save processing history
+temp_path = MANIFEST_PATH.with_suffix(".tmp")
+temp_path.write_text(json.dumps(manifest, indent=2))
+temp_path.replace(MANIFEST_PATH)
+
+print("Total stored chunks:", collection.count())
