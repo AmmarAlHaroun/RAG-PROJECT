@@ -54,6 +54,6 @@ while True:
             print("\nI could not find a relevant answer.")
             continue
 
-        print(f"\nSource: {metadata['source']}")
         print(" ".join(text.split()))
+        print(f"\nSource: {metadata['source']}")
    

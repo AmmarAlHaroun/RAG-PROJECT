@@ -1,47 +1,41 @@
-# University Policies
+# University Student Policies
 
-- Attendance:
-  - Students are expected to attend scheduled classes and practical sessions.
-  - Students should notify the instructor when an absence is unavoidable.
-  - Students are responsible for reviewing material missed during an absence.
-- Academic integrity:
-  - Students must submit their own work unless collaboration is explicitly allowed.
-  - Sources, data, code, and ideas from other people must be properly credited.
-  - Plagiarism, fabrication, cheating, and unauthorized assistance are prohibited.
-  - Suspected violations may be referred for academic review.
-- Use of artificial intelligence:
-  - AI tools may be used only when permitted by the instructor or assignment instructions.
-  - Students remain responsible for the accuracy and originality of submitted work.
-  - AI-generated material must be reviewed, corrected, and acknowledged when required.
-  - Students must not upload confidential university or personal information to public AI tools.
-- Assessment and grading:
-  - Assignments must be submitted through the designated learning platform.
-  - Students should check submission requirements before the deadline.
-  - Grades are based on the published assessment criteria and rubric.
-  - Grade questions should be submitted respectfully within the stated review period.
-- Late work:
-  - Late submissions may receive a penalty unless an extension has been approved.
-  - Extension requests should be made before the deadline whenever possible.
-  - Documented emergencies may be considered under university procedures.
-- Communication:
-  - Students should use their official university email for academic communication.
-  - Messages should include the student name, course, and a clear description of the request.
-  - Instructors normally respond during published working hours.
-- Accessibility and accommodations:
-  - Students who require academic accommodations should contact the authorized accessibility office.
-  - Approved accommodations apply according to the official accommodation notice.
-  - Course staff should protect the privacy of accommodation information.
-- Privacy and data protection:
-  - Personal information must be handled only for legitimate academic purposes.
-  - Student records must not be shared with unauthorized people.
-  - Research or project data must follow applicable university and legal requirements.
-- Student conduct:
-  - Students must treat classmates, instructors, and staff with respect.
-  - Harassment, discrimination, threats, and disruptive behavior are not permitted.
-  - Concerns may be reported through the university student-support or conduct channels.
-- Safety:
-  - Students must follow health, safety, and laboratory instructions.
-  - Accidents, hazards, and security incidents should be reported promptly.
-- Appeals:
-  - Students may appeal academic or administrative decisions using the official university process.
-  - Appeals must be submitted within the stated deadline and include supporting information.
+- Policy scope: These policies apply to students enrolled in undergraduate courses.
+- Policy status: This is fictional practice data for testing a retrieval system.
+- Dataset version: 4.
+- Attendance rule: Students should attend all scheduled lectures and laboratory sessions.
+- Attendance exception: Students who miss a class should notify the instructor within 48 hours.
+- Attendance responsibility: Students must obtain and review material missed during an absence.
+
+- Late submission rule: An assignment submitted late loses 10 percent of its mark per calendar day.
+- Late submission limit: Late work is accepted for a maximum of 3 calendar days.
+- Late submission exception: An approved extension removes the late penalty.
+- Extension request: Students should request an extension before the assignment deadline.
+
+- Academic integrity rule: Students must submit their own work unless collaboration is explicitly allowed.
+- Plagiarism rule: Copying words, code, data, or ideas without credit is prohibited.
+- Cheating rule: Unauthorized help during an examination or assignment is prohibited.
+- Academic integrity consequence: Suspected violations may be referred to the academic integrity committee.
+
+- Artificial intelligence rule: AI tools may be used only when the instructor or assignment allows them.
+- Artificial intelligence responsibility: Students are responsible for checking every AI-generated claim.
+- Artificial intelligence disclosure: Students must acknowledge AI assistance when the assignment requires disclosure.
+- Artificial intelligence privacy: Students must not upload confidential university or personal information to public AI tools.
+
+- Grade review rule: A student may request a grade review within 7 calendar days of receiving the grade.
+- Grade review requirement: The request must identify the rubric criterion and explain the reason for the review.
+- Grade appeal rule: Formal appeals must follow the university appeal procedure after the grade review.
+
+- Communication rule: Students must use their official university email for academic communication.
+- Communication requirement: Messages should include the student name, course code, and a clear request.
+- Response expectation: Staff normally respond during published working hours.
+
+- Accessibility rule: Students who need accommodations should contact the university accessibility office.
+- Accessibility privacy: Accommodation information must be shared only with staff who need it to support the student.
+
+- Data protection rule: Student records must not be shared with unauthorized people.
+- Data protection purpose: Personal information may be used only for legitimate academic or administrative purposes.
+
+- Student conduct rule: Students must treat classmates, instructors, and staff respectfully.
+- Student conduct prohibition: Harassment, threats, discrimination, and disruptive behavior are prohibited.
+- Safety rule: Students must follow laboratory safety instructions and report hazards promptly.
